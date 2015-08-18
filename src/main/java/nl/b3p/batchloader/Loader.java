@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Loader {
     private URL url;
-    private List<URL> urls = new ArrayList<>();
+    private List<Tuple> urls = new ArrayList<>();
     private static final Log log = LogFactory.getLog(Loader.class);
     
     public Loader(URL url){
@@ -37,9 +37,9 @@ public class Loader {
             String line = null;
             while( (line = br.readLine()) != null){
                 log.info("Processing line: " + line);
-                URL u = parseLine(line);
-                if(u != null){
-                    urls.add(u);
+                Tuple t = parseLine(line);
+                if(t != null){
+                    urls.add(t);
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -58,9 +58,9 @@ public class Loader {
         log.info("Finished parsing");
     }
     
-    private URL parseLine(String line){
-        URL u = null;
+    private Tuple parseLine(String line){
        
+        Tuple t = null;
         String name = line.substring(1, line.indexOf("',"));
         String rest = line.substring(line.indexOf("',")+2);
         int index = rest.indexOf(", '")+2;
@@ -68,11 +68,14 @@ public class Loader {
         log.info("Naam: " + name);
         log.info("URL: " + url);
         try {
-            u=  new URL(url);
+            URL u=  new URL(url);
+            t = new Tuple();
+            t.url = u;
+            t.naam = name;
         } catch (MalformedURLException ex) {
             log.error("Cannot create url from :" + line + ". Was trying to parse a URL from line " + url);
         }
-        return u;
+        return t;
     }
     
     public void start(){
@@ -90,5 +93,12 @@ public class Loader {
         Loader l = new Loader(new URL(url));
         l.parse(filename);
         l.start();
+    }
+    
+    class Tuple{
+        private URL url;
+        private String naam;
+        
+        
     }
 }
