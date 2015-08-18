@@ -31,10 +31,12 @@ public class Loader {
     
     public void parse(String filename){
         BufferedReader br = null;
+        log.info("Parsing file "+ filename);
         try {
             br = new BufferedReader(new FileReader(filename));
             String line = null;
             while( (line = br.readLine()) != null){
+                log.info("Processing line: " + line);
                 URL u = parseLine(line);
                 if(u != null){
                     urls.add(u);
@@ -53,11 +55,18 @@ public class Loader {
                 }
             }
         }   
+        log.info("Finished parsing");
     }
     
     private URL parseLine(String line){
-        String url = line;
         URL u = null;
+       
+        String name = line.substring(1, line.indexOf("',"));
+        String rest = line.substring(line.indexOf("',")+2);
+        int index = rest.indexOf(", '")+2;
+        String url = rest.substring(index+1, rest.indexOf("',", index));
+        log.info("Naam: " + name);
+        log.info("URL: " + url);
         try {
             u=  new URL(url);
         } catch (MalformedURLException ex) {
