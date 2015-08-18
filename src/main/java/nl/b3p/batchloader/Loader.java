@@ -13,8 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -74,6 +72,7 @@ public class Loader {
 
     public static void main (String[] args) throws MalformedURLException{
         if(args.length != 2){
+            log.error("Incorrect number of arguments given: " + args.length);
             throw new IllegalArgumentException("Should supply 2 arguments: filename and url");
         }
         String filename = args[0];
