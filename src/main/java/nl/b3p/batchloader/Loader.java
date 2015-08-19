@@ -15,8 +15,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,6 +23,12 @@ import org.apache.commons.logging.LogFactory;
  * @author Meine Toonen <meinetoonen@b3partners.nl>
  */
 public class Loader {
+    
+    private final int POS_NAME = 5;
+    private final int POS_PROTOCOL = 0;
+    private final int POS_URL = 7;
+    private final int POS_TILINGPROTOCOL = 10;
+
     private URL url;
     private List<Tuple> urls = new ArrayList<>();
     private static final Log log = LogFactory.getLog(Loader.class);
@@ -66,14 +70,11 @@ public class Loader {
     private Tuple parseLine(String line){
        
         Tuple t = null;
-        String protocol = line.substring(1, line.indexOf("',"));
-        
-        String rest = line.substring(line.indexOf("',")+2);
-        String name = rest.substring(2, rest.indexOf("',"));
-        
-        rest = rest.substring(rest.indexOf("',")+2);
-        int index = rest.indexOf(", '")+2;
-        String url = rest.substring(index+1, rest.indexOf("',", index));
+        String protocol = getValue(POS_PROTOCOL, line);
+        String name = getValue(POS_NAME,line);
+        String url = getValue(POS_URL,line);
+        String tilingProtocol = getValue(POS_TILINGPROTOCOL,line);
+
         log.info("Naam: " + name);
         log.info("URL: " + url);
         try {
@@ -82,6 +83,7 @@ public class Loader {
             t.url = u;
             t.naam = name;
             t.protocol = protocol;
+            t.tilingProtocol = tilingProtocol;
         } catch (MalformedURLException ex) {
             log.error("Cannot create url from :" + line + ". Was trying to parse a URL from line " + url);
         }
@@ -137,7 +139,6 @@ public class Loader {
         private URL url;
         private String protocol;
         private String naam;
-        
-        
+        private String tilingProtocol;
     }
 }
