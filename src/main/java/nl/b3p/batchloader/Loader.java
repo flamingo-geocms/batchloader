@@ -37,6 +37,7 @@ public class Loader {
         BufferedReader br = null;
         log.info("Parsing file "+ filename);
         try {
+            
             br = new BufferedReader(new FileReader(filename));
             String line = null;
             while( (line = br.readLine()) != null){
@@ -85,6 +86,21 @@ public class Loader {
             log.error("Cannot create url from :" + line + ". Was trying to parse a URL from line " + url);
         }
         return t;
+    }
+
+    public String getValue(int pos, String line){
+        line = line.substring(line.indexOf("VALUES (") +8);
+        String rest = line;
+        String delimiter = ",";
+        String found = null;
+        for (int i = 0; i <= pos; i++) {
+            int index = rest.indexOf(delimiter);
+            found = rest.substring(0, index);
+            rest = rest.substring(index+2);
+        }
+        found = found.replaceAll("'", "");
+
+        return found;
     }
     
     public void start(){
