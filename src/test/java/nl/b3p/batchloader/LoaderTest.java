@@ -40,7 +40,7 @@ public class LoaderTest {
 
     @BeforeClass
     public static void setUpClass() throws URISyntaxException {
-        String filename = "geoservices2.sql";
+        String filename = "geoservices.sql";
           BufferedReader br = null;
         log.info("Parsing file "+ filename);
         try {

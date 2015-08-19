@@ -84,6 +84,7 @@ public class Loader {
             t.naam = name;
             t.protocol = protocol;
             t.tilingProtocol = tilingProtocol;
+            t.line = line;
         } catch (MalformedURLException ex) {
             log.error("Cannot create url from :" + line + ". Was trying to parse a URL from line " + url);
         }
@@ -106,18 +107,27 @@ public class Loader {
     }
     
     public void start(){
-        int category = 2;
+        int category = 1;
         String request = url.toString() + "action/geoservice?add=true&category="+category;
         for (Tuple t : urls) {
             try {
                 String r2 = request;
                 String urlEncoded = URLEncoder.encode(t.url.toString(), "UTF-8");
                 r2 += "&url=" + urlEncoded;
+                r2 += "&serviceName=" + t.naam;
                 r2 += "&protocol="+ t.protocol;
-                log.debug("Request url: " + r2);
+                r2 += "&crs=28992";
+                r2 += "&serviceBbox=-285401.0,22598.0,595401.0,903401.0";
+                r2 += "&tilingProtocol="+t.tilingProtocol;
+                r2 += "&tileSize=256";
+                r2 += "&resolutions=3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84,0.42,0.21,0.105";
+                r2 += "&imageExtension=png";
+
+                log.error("Request url: " + r2);
+           
             } catch (UnsupportedEncodingException ex) {
                 log.error("Cannot encode uri",ex);
-            }
+            } 
         }
         
     }
@@ -140,5 +150,6 @@ public class Loader {
         private String protocol;
         private String naam;
         private String tilingProtocol;
+        private String line;
     }
 }
